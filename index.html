@@ -285,8 +285,9 @@
   <!-- ============ SCHERMATA DI AVVIO ============ -->
   <section id="screen-start" class="card">
     <h2 class="sec">Valuta i tuoi punti di forza e le tue lacune</h2>
-    <p class="lead">Un test di 15 domande a risposta chiusa per fare il punto all'inizio della seconda.
-      Le domande sono estratte a sorte da un archivio di 180: 3 per ciascuno dei cinque argomenti qui sotto.
+    <p class="lead">Un test di 20 domande a risposta chiusa per fare il punto all'inizio della seconda.
+      Le domande sono estratte a sorte da un archivio di 180: 4 per ciascuno dei cinque argomenti qui sotto.
+      Durante il test non viene indicato a quale argomento appartiene ogni domanda: lo scopri nel report finale.
       Contano la <strong>precisione</strong> delle risposte e la <strong>rapidità</strong> con cui rispondi.</p>
 
     <ul class="topics">
@@ -298,7 +299,7 @@
     </ul>
 
     <div class="meta-row">
-      <span class="chip"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>15 domande · 4 risposte ciascuna</span>
+      <span class="chip"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>20 domande · 4 risposte ciascuna</span>
       <span class="chip"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Nessun limite di tempo · cronometro attivo</span>
       <span class="chip"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>Report finale per argomento</span>
     </div>
@@ -736,8 +737,8 @@ const TOPICS = {
   5:{ nome:"Formule inverse", target:40 },
 };
 
-const PER_TOPIC = 3;   // domande estratte per ciascun argomento
-const TOTAL = 15;
+const PER_TOPIC = 4;   // domande estratte per ciascun argomento
+const TOTAL = 20;
 
 /* ---------------- utilità ---------------- */
 function shuffle(arr){
@@ -767,7 +768,7 @@ function questionPoints(item){
 }
 
 /* ---------------- stato ---------------- */
-let quiz = [];       // 15 domande estratte
+let quiz = [];       // 20 domande estratte
 let current = 0;
 let timerId = null;
 
@@ -833,8 +834,8 @@ function renderQuestion(){
 
   // corpo domanda
   const body = document.getElementById('qBody');
-  let html = '<div class="topic-badge">Argomento ' + item.t + ' · ' + TOPICS[item.t].nome + '</div>';
-  html += '<p class="q-text">' + item.q + '</p>';
+  // L'argomento non viene mostrato durante la somministrazione: comparirà solo nel report finale.
+  let html = '<p class="q-text">' + item.q + '</p>';
   html += '<div class="options" role="group" aria-label="Opzioni di risposta">';
   const keys = ["A","B","C","D"];
   item.opts.forEach((opt, i) => {
@@ -939,7 +940,7 @@ function showReport(){
 
     let cls, badge, badgeIcon;
     if (giuste === tot){ cls = "forza"; badge = "Punto di forza"; badgeIcon = 'star'; forti.push(TOPICS[t].nome); }
-    else if (giuste <= 1){ cls = "lacuna"; badge = "Lacuna da recuperare"; badgeIcon = 'alert'; deboli.push(TOPICS[t].nome); }
+    else if (giuste <= 2){ cls = "lacuna"; badge = "Lacuna da recuperare"; badgeIcon = 'alert'; deboli.push(TOPICS[t].nome); }
     else { cls = "medio"; badge = "Da consolidare"; badgeIcon = 'minus'; }
 
     // valutazione rapidità rispetto al riferimento
